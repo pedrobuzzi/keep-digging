@@ -1,0 +1,347 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# keep-digging — Recursive research loop using Claude CLI
+# Each iteration adopts a different perspective to dig deeper into a question.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$SCRIPT_DIR/lib/utils.sh"
+source "$SCRIPT_DIR/lib/perspectives.sh"
+source "$SCRIPT_DIR/lib/prompts.sh"
+source "$SCRIPT_DIR/lib/summarize.sh"
+
+# ─── Defaults ────────────────────────────────────────────────────────────────
+MAX_ITERATIONS=10
+OUTPUT_DIR=""
+MODELS="opus,sonnet,haiku"
+QUESTION=""
+QUESTION_FILE=""
+RESUME=false
+SYNTHESIZE_ONLY=false
+VERBOSE=false
+
+# ─── Usage ───────────────────────────────────────────────────────────────────
+usage() {
+    cat <<EOF
+Usage: keep-digging [OPTIONS] <question>
+
+Recursive deep-research loop using Claude CLI.
+Each iteration adopts a different perspective to explore the question from
+multiple angles, then synthesizes everything into a final answer.
+
+Options:
+  -n, --max-iterations <N>    Max iterations (default: 10)
+  -o, --output-dir <path>     Output directory (default: auto-generated)
+  -m, --models <list>         Comma-separated model rotation (default: opus,sonnet,haiku)
+  -q, --question-file <path>  Read question from file
+  -r, --resume                Resume from last completed iteration (requires -o)
+  -s, --synthesize-only       Only run final synthesis (requires -o)
+  -v, --verbose               Verbose output
+  -h, --help                  Show this help
+
+Examples:
+  keep-digging "What caused the fall of the Roman Empire?"
+  keep-digging -n 5 -m sonnet,haiku "How does mRNA vaccine technology work?"
+  keep-digging -r -o dig_roman-empire_20240101_120000/ -n 15
+  keep-digging -s -o dig_roman-empire_20240101_120000/
+EOF
+    exit 0
+}
+
+# ─── Argument Parsing ────────────────────────────────────────────────────────
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -n|--max-iterations)
+                MAX_ITERATIONS="$2"; shift 2 ;;
+            -o|--output-dir)
+                OUTPUT_DIR="$2"; shift 2 ;;
+            -m|--models)
+                MODELS="$2"; shift 2 ;;
+            -q|--question-file)
+                QUESTION_FILE="$2"; shift 2 ;;
+            -r|--resume)
+                RESUME=true; shift ;;
+            -s|--synthesize-only)
+                SYNTHESIZE_ONLY=true; shift ;;
+            -v|--verbose)
+                VERBOSE=true; shift ;;
+            -h|--help)
+                usage ;;
+            -*)
+                log_error "Unknown option: $1"
+                exit 1 ;;
+            *)
+                QUESTION="$1"; shift ;;
+        esac
+    done
+}
+
+# ─── Validate ────────────────────────────────────────────────────────────────
+validate_args() {
+    # Require claude CLI
+    if ! command -v claude &>/dev/null; then
+        log_error "claude CLI not found. Install it first: https://docs.anthropic.com/en/docs/claude-cli"
+        exit 1
+    fi
+
+    # Get question from file if specified
+    if [[ -n "$QUESTION_FILE" ]]; then
+        if [[ ! -f "$QUESTION_FILE" ]]; then
+            log_error "Question file not found: $QUESTION_FILE"
+            exit 1
+        fi
+        QUESTION=$(cat "$QUESTION_FILE")
+    fi
+
+    # Resume/synthesize-only require output dir
+    if $RESUME || $SYNTHESIZE_ONLY; then
+        if [[ -z "$OUTPUT_DIR" ]]; then
+            log_error "--resume and --synthesize-only require -o <output-dir>"
+            exit 1
+        fi
+        if [[ ! -d "$OUTPUT_DIR" ]]; then
+            log_error "Output directory not found: $OUTPUT_DIR"
+            exit 1
+        fi
+        # Read question from existing session
+        if [[ -f "$OUTPUT_DIR/question.txt" ]]; then
+            QUESTION=$(cat "$OUTPUT_DIR/question.txt")
+        else
+            log_error "No question.txt found in $OUTPUT_DIR"
+            exit 1
+        fi
+    fi
+
+    if [[ -z "$QUESTION" ]]; then
+        log_error "No question provided. Use: keep-digging <question>"
+        echo "" >&2
+        usage
+    fi
+}
+
+# ─── Initialize Output Directory ────────────────────────────────────────────
+init_output_dir() {
+    if [[ -z "$OUTPUT_DIR" ]]; then
+        local slug
+        slug=$(generate_slug "$QUESTION")
+        local timestamp
+        timestamp=$(date +%Y%m%d_%H%M%S)
+        OUTPUT_DIR="dig_${slug}_${timestamp}"
+    fi
+
+    mkdir -p "$OUTPUT_DIR/iterations"
+    mkdir -p "$OUTPUT_DIR/synthesis"
+
+    # Save question
+    if [[ ! -f "$OUTPUT_DIR/question.txt" ]]; then
+        echo "$QUESTION" > "$OUTPUT_DIR/question.txt"
+    fi
+
+    # Save config
+    cat > "$OUTPUT_DIR/config.json" <<EOF
+{
+    "max_iterations": $MAX_ITERATIONS,
+    "models": "$MODELS",
+    "created": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+    "verbose": $VERBOSE
+}
+EOF
+
+    log_info "Output directory: $OUTPUT_DIR"
+}
+
+# ─── Run One Iteration ──────────────────────────────────────────────────────
+run_iteration() {
+    local i="$1"
+    local iter_dir
+    iter_dir=$(printf "%s/iterations/iteration_%02d" "$OUTPUT_DIR" "$i")
+    mkdir -p "$iter_dir"
+
+    # Get perspective and model
+    get_perspective "$i"
+    get_model "$i" "$MODELS"
+
+    log_info "Iteration $i/$MAX_ITERATIONS — ${BOLD}${PERSPECTIVE_NAME}${NC} (model: $MODEL_NAME)"
+
+    # Save metadata
+    echo "$PERSPECTIVE_NAME" > "$iter_dir/perspective.txt"
+    echo "$MODEL_NAME" > "$iter_dir/model.txt"
+
+    # Build context from previous iterations
+    log_verbose "Building context from previous iterations..."
+    local context
+    context=$(build_context "$OUTPUT_DIR" "$i")
+
+    # Build prompt
+    local prompt
+    prompt=$(build_iteration_prompt "$QUESTION" "$PERSPECTIVE_NAME" "$PERSPECTIVE_DESC" "$context" "$i" "$MAX_ITERATIONS")
+    echo "$prompt" > "$iter_dir/prompt.txt"
+
+    # Call Claude
+    log_verbose "Calling claude with model $MODEL_NAME..."
+    local response
+    response=$(echo "$prompt" | claude -p --model "$MODEL_NAME" 2>&1)
+
+    if [[ -z "$response" ]]; then
+        log_error "Empty response from Claude on iteration $i"
+        return 1
+    fi
+
+    # Save response
+    echo "$response" > "$iter_dir/answer.md"
+
+    # Extract and save sub-questions
+    local questions
+    questions=$(extract_questions "$response")
+    echo "$questions" > "$iter_dir/questions.txt"
+
+    # Generate summary (cheap haiku call)
+    log_verbose "Generating summary..."
+    local summary
+    summary=$(generate_summary "$response" "$QUESTION" "$PERSPECTIVE_NAME" "$i")
+    echo "$summary" > "$iter_dir/summary.txt"
+
+    # Show progress
+    show_progress "$i" "$MAX_ITERATIONS" "Iteration $i complete — $PERSPECTIVE_NAME"
+    echo "" >&2
+
+    log_success "Iteration $i saved to $iter_dir"
+}
+
+# ─── Run Synthesis ───────────────────────────────────────────────────────────
+run_synthesis() {
+    log_info "Running final synthesis..."
+
+    # Gather all summaries
+    local all_summaries=""
+    local iterations_dir="$OUTPUT_DIR/iterations"
+
+    for dir in "$iterations_dir"/iteration_*; do
+        [[ -d "$dir" ]] || continue
+        if [[ -f "$dir/summary.txt" ]]; then
+            local num perspective=""
+            num=$(basename "$dir" | sed 's/iteration_0*//')
+            [[ -f "$dir/perspective.txt" ]] && perspective=$(cat "$dir/perspective.txt")
+            all_summaries+="### Iteration ${num} (${perspective})"$'\n'
+            all_summaries+=$(cat "$dir/summary.txt")
+            all_summaries+=$'\n\n'
+        fi
+    done
+
+    if [[ -z "$all_summaries" ]]; then
+        log_error "No iteration summaries found. Cannot synthesize."
+        return 1
+    fi
+
+    # Build synthesis prompt
+    local prompt
+    prompt=$(build_synthesis_prompt "$QUESTION" "$all_summaries")
+
+    # Call Claude with opus for synthesis
+    log_info "Calling Claude (opus) for final synthesis..."
+    local response
+    response=$(echo "$prompt" | claude -p --model opus 2>&1)
+
+    if [[ -z "$response" ]]; then
+        log_error "Empty response from Claude during synthesis"
+        return 1
+    fi
+
+    # Parse sections using the delimiter
+    local final_answer="" key_findings="" open_questions=""
+
+    if echo "$response" | grep -q "===SECTION_BREAK==="; then
+        final_answer=$(echo "$response" | awk '/===SECTION_BREAK===/{found++; next} found==0')
+        key_findings=$(echo "$response" | awk '/===SECTION_BREAK===/{found++; next} found==1')
+        open_questions=$(echo "$response" | awk '/===SECTION_BREAK===/{found++; next} found==2')
+    else
+        # If no delimiters, put everything in final answer
+        log_warn "Synthesis response missing section delimiters. Saving as single file."
+        final_answer="$response"
+    fi
+
+    # Save synthesis files
+    echo "$final_answer" > "$OUTPUT_DIR/synthesis/final_answer.md"
+
+    if [[ -n "$key_findings" ]]; then
+        echo "$key_findings" > "$OUTPUT_DIR/synthesis/key_findings.md"
+    fi
+
+    if [[ -n "$open_questions" ]]; then
+        echo "$open_questions" > "$OUTPUT_DIR/synthesis/open_questions.md"
+    fi
+
+    log_success "Synthesis complete!"
+    log_info "Final answer:    $OUTPUT_DIR/synthesis/final_answer.md"
+    [[ -n "$key_findings" ]] && log_info "Key findings:    $OUTPUT_DIR/synthesis/key_findings.md"
+    [[ -n "$open_questions" ]] && log_info "Open questions:  $OUTPUT_DIR/synthesis/open_questions.md"
+}
+
+# ─── SIGINT Handler ──────────────────────────────────────────────────────────
+handle_interrupt() {
+    echo "" >&2
+    log_warn "Interrupted! Progress saved to: $OUTPUT_DIR"
+    log_info "Resume with: keep-digging -r -o $OUTPUT_DIR -n $MAX_ITERATIONS"
+    exit 130
+}
+
+# ─── Main ────────────────────────────────────────────────────────────────────
+main() {
+    parse_args "$@"
+    validate_args
+
+    # Synthesize-only mode
+    if $SYNTHESIZE_ONLY; then
+        log_info "Synthesize-only mode"
+        run_synthesis
+        return
+    fi
+
+    # Initialize
+    init_output_dir
+
+    # Determine start iteration
+    local start=1
+    if $RESUME; then
+        local last_completed
+        last_completed=$(detect_last_completed_iteration "$OUTPUT_DIR")
+        cleanup_incomplete_iterations "$OUTPUT_DIR"
+        start=$(( last_completed + 1 ))
+        if (( start > MAX_ITERATIONS )); then
+            log_info "All $MAX_ITERATIONS iterations already complete."
+            log_info "Running synthesis..."
+            run_synthesis
+            return
+        fi
+        log_info "Resuming from iteration $start (last completed: $last_completed)"
+    fi
+
+    # Set up interrupt handler
+    trap handle_interrupt SIGINT
+
+    # Print header
+    echo "" >&2
+    printf "${BOLD}keep-digging${NC} — Recursive Research Loop\n" >&2
+    printf "${DIM}Question:${NC} %s\n" "$QUESTION" >&2
+    printf "${DIM}Iterations:${NC} %d (starting at %d)\n" "$MAX_ITERATIONS" "$start" >&2
+    printf "${DIM}Models:${NC} %s\n" "$MODELS" >&2
+    printf "${DIM}Output:${NC} %s\n" "$OUTPUT_DIR" >&2
+    echo "" >&2
+
+    # Main loop
+    for ((i = start; i <= MAX_ITERATIONS; i++)); do
+        run_iteration "$i"
+    done
+
+    echo "" >&2
+
+    # Final synthesis
+    run_synthesis
+
+    echo "" >&2
+    log_success "Done! Results in: $OUTPUT_DIR"
+}
+
+main "$@"
