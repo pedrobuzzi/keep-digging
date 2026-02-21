@@ -16,7 +16,7 @@ generate_summary() {
     local prompt
     prompt=$(build_summary_prompt "$response" "$question" "$perspective_name" "$iteration")
 
-    echo "$prompt" | claude -p --model haiku 2>&1
+    echo "$prompt" | claude -p --model haiku 2>/dev/null || true
 }
 
 # Build accumulated context with sliding window
@@ -82,7 +82,7 @@ ${old_summaries}
 META_PROMPT
 )
             local meta_summary
-            meta_summary=$(echo "$meta_prompt" | claude -p --model haiku 2>&1)
+            meta_summary=$(echo "$meta_prompt" | claude -p --model haiku 2>/dev/null) || true
 
             context+="### Meta-Summary (Iterations 1-${old_end})"$'\n'
             context+="$meta_summary"

@@ -181,11 +181,15 @@ run_iteration() {
 
     # Call Claude
     log_verbose "Calling claude with model $MODEL_NAME..."
-    local response
-    response=$(echo "$prompt" | claude -p --model "$MODEL_NAME" 2>&1)
+    local response stderr_file
+    stderr_file="$iter_dir/stderr.log"
+    response=$(echo "$prompt" | claude -p --model "$MODEL_NAME" 2>"$stderr_file") || true
 
     if [[ -z "$response" ]]; then
         log_error "Empty response from Claude on iteration $i"
+        if [[ -s "$stderr_file" ]]; then
+            log_error "Claude stderr: $(cat "$stderr_file")"
+        fi
         return 1
     fi
 
@@ -241,11 +245,15 @@ run_synthesis() {
 
     # Call Claude with opus for synthesis
     log_info "Calling Claude (opus) for final synthesis..."
-    local response
-    response=$(echo "$prompt" | claude -p --model opus 2>&1)
+    local response stderr_file
+    stderr_file="$OUTPUT_DIR/synthesis/stderr.log"
+    response=$(echo "$prompt" | claude -p --model opus 2>"$stderr_file") || true
 
     if [[ -z "$response" ]]; then
         log_error "Empty response from Claude during synthesis"
+        if [[ -s "$stderr_file" ]]; then
+            log_error "Claude stderr: $(cat "$stderr_file")"
+        fi
         return 1
     fi
 
