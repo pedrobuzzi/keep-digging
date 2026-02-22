@@ -1,0 +1,82 @@
+You are a research agent performing deep, iterative analysis. You are on iteration 3 of 5.
+
+## Original Question
+Is serverless actually cheaper, or are companies just hiding complexity and cost?
+
+## Your Current Perspective: Historical Analyst
+Examine the topic through the lens of historical precedent, patterns, and evolution over time. What parallels exist in history? How has understanding of this topic changed? What can past events teach us? Identify recurring cycles and long-term trends.
+
+## Research So Far
+### Iteration 1 (First Principles Thinker)
+## Serverless Cost Analysis: Compressed Summary
+
+**Key Insight:** Serverless is genuinely cheaper only for low, sporadic workloads—not a universal cost win.
+
+**Sub-Questions Generated:**
+1. How do actual cost components (compute, memory, cold starts, orchestration) map across serverless vs. traditional infrastructure?
+2. What is true TCO including vendor lock-in, observability tooling, and engineering time?
+3. At what utilization threshold does serverless become more expensive? (Empirically: ~15-20% for Lambda vs. EC2)
+4. Are companies trading one cost type (infrastructure ops) for another (architectural complexity, debugging)?
+5. Do cloud providers and consultants have incentives to oversell serverless regardless of economics?
+
+**First-Principles Foundation:**
+- All computation requires physical resources; serverless merely abstracts management
+- Pay-per-use is only cheaper than reserved capacity when utilization is low—mathematical certainty
+- Lambda costs ~$0.0000166667/GB-second vs. EC2 at ~$0.00001156/GB-second when fully utilized
+- Hidden operational costs often ignored: cold-start latency, observability complexity, architectural overhead (API Gateway, SQS, SNS charges), vendor lock-in switching costs, and engineering time
+
+**Core Problem:** Companies measure serverless savings narrowly (just Lambda invocation costs) while ignoring the constellation of additional AWS services, tooling, and complexity their serverless architecture requires. They're not intentionally hiding costs—they're systematically *underaccounting* for them.
+
+**Why Confusion Persists:**
+- Cloud providers benefit from serverless (higher revenue per compute cycle)
+- "Cheaper" conflates unrelated dimensions: infrastructure management time, raw compute cost, architectural complexity, time-to-market, operational maturity
+- Serverless can be simultaneously cheaper in time-to-market and more expensive in total cost of ownership
+
+**Progress: 4/10**
+Establishes foundational economics and key variables but lacks empirical case studies, long-term cost evolution, organizational impacts, and analysis of emerging alternatives (containers-as-a-service, edge compute).
+
+### Iteration 2 (Skeptical Critic)
+# Serverless Cost Analysis: Iteration 2 Summary
+
+## Critical Sub-Questions
+- **Survivorship bias**: Public serverless case studies skew positive (success stories published, failures hidden). How does the actual failure rate compare to the curated evidence base?
+- **Comparison baseline**: Serverless vs. raw EC2 is a strawman. Modern alternatives (Fargate, Cloud Run, Kubernetes with KEDA, Spot instances, Savings Plans) often outcompete serverless economically—yet these comparisons are rarely made.
+- **Structural incentives**: AWS earns higher margins on Lambda than EC2; consultants profit from architectural complexity; engineers build career capital through serverless adoption. Does this explain cost claims better than incompetence?
+- **Complexity transfer costs**: Moving from infrastructure ops to distributed systems debugging isn't neutral. Serverless failure modes (cold start races, silent SQS drops, complex Step Functions workflows) require expensive observability tools ($3K–$30K/month)—rarely included in cost analyses.
+
+## Key Findings
+The prior analysis was too charitable. Rather than innocent "underaccounting," structural incentives predict deliberate cost obscuring. Specific figures cited (Lambda pricing, breakeven thresholds) lacked sources and ignored workload variability. 
+
+AWS's pricing architecture deliberately obscures aggregate costs: Lambda's sub-penny granularity, API Gateway's per-million-request billing, and CloudWatch's per-GB ingestion charges hide scaled expenses better than monthly EC2 invoices. The unit economics visibility problem isn't accidental—it reduces cost scrutiny.
+
+Prime Video's 2023 serverless-to-monolith migration is notable precisely because it's rare public admission of failure. The absence of serverless postmortems suggests systematic reporting bias, not evidence of success.
+
+## Progress: 5/10
+Iteration 1 established foundational cost math and hidden category identification. Iteration 2 challenges assumptions and identifies incentive structures but remains primarily theoretical. Lacking: empirical case studies with actual costs, temporal analysis of scaling dynamics, and organizational decision-making mechanics behind false claims.
+
+## Your Task
+Adopt the "Historical Analyst" perspective fully. Your job is to advance our understanding of the original question.
+
+Instructions:
+1. Review what has been covered so far (if anything). Do NOT repeat prior findings.
+2. Identify gaps, weaknesses, or underexplored angles in the existing research.
+3. Generate 3-5 NEW sub-questions that dig deeper, challenge assumptions, or explore neglected dimensions.
+4. Provide substantive analysis that adds genuine new insight from your perspective.
+5. Assess overall progress toward answering the original question.
+
+You MUST structure your response with these exact section headers:
+
+## New Sub-Questions
+- List 3-5 new sub-questions that would deepen understanding
+
+## Analysis
+Your substantive contribution from the Historical Analyst perspective. Be thorough and specific. Include evidence, reasoning, and concrete examples where possible.
+
+## Progress Assessment
+Rate progress toward fully answering the original question on a scale of 1-10, where:
+- 1-3: Still exploring the surface
+- 4-6: Good foundation, significant gaps remain
+- 7-8: Strong understanding, some nuances to explore
+- 9-10: Comprehensive understanding achieved
+Score: X/10
+Brief justification for the score.

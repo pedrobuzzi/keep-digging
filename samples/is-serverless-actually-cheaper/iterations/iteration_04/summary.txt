@@ -1,0 +1,21 @@
+## Serverless Cost Opacity: A Systems Perspective
+
+**Key Insight**: Serverless doesn't hide costs through deception—system architecture structurally impairs cost visibility. The abstraction that enables easy adoption is the same abstraction that delays cost feedback from months to quarters.
+
+### Core Mechanism: System Boundary Redrawing
+Traditional architectures have tight cost feedback loops (resource → bill → adjustment). Serverless fragments boundaries across functions, event routing, state management, observability, and security layers—each with independent pricing. The actual cost-relevant system is far larger than teams perceive, creating delayed negative feedback that prevents timely correction.
+
+### Four Reinforcing Lock-In Loops
+1. **Skill Specialization**: Teams become Lambda experts, losing infrastructure knowledge; migration costs increase
+2. **Tooling Investment**: SAM, CDK, custom dashboards entrench the architecture with each integration
+3. **Vendor Ecosystem**: Each AWS service adopted (Lambda → API Gateway → DynamoDB → Step Functions) increases switching costs
+4. **Narrative**: Professional identity tied to serverless success creates incentives to rationalize costs rather than acknowledge problems
+
+### Emergent Cost Behaviors
+Non-linear cost properties emerge at the system level: fan-out amplification (10x traffic → 50-100x cost), retry storms cascading across services, cold start chains compounding latency, and state explosion in external databases. These don't exist in individual functions but dominate system economics.
+
+### Leverage Points
+**Highest impact**: Workload characterization *before* architecture selection prevents most overruns. Real-time cost attribution per request path tightens feedback. Function-level optimization (the current focus) operates within flawed architecture rather than questioning it.
+
+### Progress Score: 8/10
+Theory is comprehensive, but lacks actionable synthesis. Missing: practical decision frameworks, sector-specific variations, and alternatives landscape (WebAssembly, container-as-a-service).

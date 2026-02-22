@@ -1,0 +1,23 @@
+## Synthesis Summary: Remote Work and Urban Reshaping (Iteration 10)
+
+**Core Finding:** Remote work will fundamentally reshape cities by 2045, but not through population loss. Instead, the 20th-century office-anchored urban model will dissolve, replaced by polycentric, asynchronous mixed-use networks. Probability of "fundamental reshaping": **55-65%**.
+
+**Three Dimensions of Change:**
+1. **Functional:** Central business districts permanently weakened as organizing principle
+2. **Spatial:** Intra-metro redistribution dominant; inter-metro secondary; international arbitrage emerging
+3. **Temporal:** Collapse of synchronized urban rhythms (commute, lunch, rush hour), cascading effects on transit and retail
+
+**Unified Causal Framework:**
+Technology enables remote work (30-35% of jobs); COVID created phase shift; sorting mechanisms now active—by income, firm type, city economic diversity, and building class. Feedback loops (fiscal erosion, amenity-driven price spikes, network effects) remain partially activated. Countervailing forces persist: in-person premium for creative work, housing lock-in, employer mandates for 2-3 days/week, infrastructure inertia.
+
+**Four Scenarios to 2045:**
+- **Incremental Redistribution (35-40%):** Remote work stabilizes at 20-25%, cities adapt through conversion
+- **Structural Transformation (35-40%):** AI expands remote to 35-45%, secondary cities gain 15-25%, new urban typologies emerge
+- **Radical Reconfiguration (10-15%):** 50%+ remote work, multiple downtowns face fiscal crisis, continental polycentric redistribution
+- **Reversion (10-15%):** Employer mandates push office return; remote becomes a perk
+
+**Synthesis Contribution:** Nine prior perspectives converged on heterogeneous, uneven reshaping while diverging on severity, speed, and causation. This iteration resolved contradictions: cities remain resilient *as a concept*; specific urban configurations are being fundamentally transformed. Added ethical reframe: without policy intervention, reshaping will sort by class and geography.
+
+**Key Unknown:** AI expansion to 40-50% remoteable jobs could eliminate hybrid compromise and shift probabilities dramatically.
+
+**Progress: 9/10** — Comprehensive causal model and falsifiable framework. Gaps: developing-world dynamics, Gen Z preferences, quantified fiscal feedback, climate-migration interaction.

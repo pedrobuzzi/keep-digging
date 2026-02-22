@@ -1,0 +1,34 @@
+## Systems Analysis: Remote Work & Urban Reshaping
+
+**Key Sub-Questions:**
+How do feedback loops between remote work and urban viability interact (reinforcing vs. balancing)? What are the tipping points for nonlinear urban effects? How does remote work couple with housing policy and climate migration? What emergent properties does hybrid work create? What competing agent incentives drive unexpected outcomes?
+
+**Critical Feedback Loops:**
+
+*Reinforcing (destabilizing):*
+- **Urban Doom Loop**: Remote adoption → office vacancy → tax revenue loss → service degradation → more departures
+- **Secondary City Boom**: Migration to cheaper cities → housing demand → affordability crises (Boise prices rose 60% in 2020-23)
+- **Tech-Adoption Spiral**: Remote adoption → better tools → expanded remoteable jobs (30-35% rising toward 45-50%)
+
+*Balancing (stabilizing):*
+- **Agglomeration Magnet**: Departures → lower costs → attracts startups and young workers (10-20 year timescale)
+- **Employer Backlash**: Return-to-office mandates slow adoption but face labor market arbitrage
+- **Social Isolation Correction**: Isolation drives demand for third places, clustering people in walkable neighborhoods
+
+**Nonlinear Tipping Points:**
+Commercial vacancy cascades: 20-25% (current average, manageable) → 30-35% (potential systemic collapse triggering mortgage defaults, tax revenue craters, doom loop activation).
+
+**Hybrid Work's Emergent Properties:**
+- Creates feast-famine infrastructure demands (concentrated mid-week usage increases per-unit costs)
+- Expands viable commute radius to 60-90 minutes, enabling exurban sprawl over urban abandonment
+- Generates scheduling coordination that preserves industry-level agglomeration while decoupling daily presence
+
+**System Couplings:**
+Remote work is a transmission mechanism for climate migration and housing policy—external drivers may dominate perceived impacts.
+
+**Agent Dynamics:**
+Misaligned incentives (landlords resist conversion, employers split on RTO, developers face regulatory uncertainty) produce contested, uneven adaptation rather than dramatic reshaping.
+
+**Progress: 7/10**
+
+Remote work will produce **metropolitan reorganization**—not urban decline—over 20+ years, pathway-dependent and policy-mediated. Analysis now includes systemic structure; gaps remain in quantitative modeling, city-type differentials, and AI expansion effects.

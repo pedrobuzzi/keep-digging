@@ -1,0 +1,5 @@
+Is "fundamental reshaping" even well-defined? What empirical threshold separates "fundamental" from "incremental" — and is the prior analysis quietly assuming a favorable definition?
+The historical precedent argument (telegraph/telephone/internet didn't kill cities) — is this a valid analogy, or does it commit the inductive fallacy of assuming future technology follows past patterns?
+Are the 30-35% "remote-workable jobs" estimates based on pre-pandemic task analysis that may not reflect actual revealed preferences now that workers and firms have experimented at scale?
+What does the *distribution* of remote work adoption look like across income, education, and geography — and does the concentration among high-earners actually *amplify* urban inequality rather than disperse it?
+If hybrid work (2-3 days/week in office) is the dominant equilibrium, does it actually *reduce* demand for urban real estate meaningfully, or does it just redistribute it within the same metro?

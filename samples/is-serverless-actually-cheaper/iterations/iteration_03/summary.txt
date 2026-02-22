@@ -1,0 +1,25 @@
+# Serverless Cost Analysis: Historical Analyst Perspective — Compressed Summary
+
+## Key Findings
+
+Serverless repeats a 60-year IT pattern: each abstraction layer (mainframes→minicomputers→virtualization→cloud) promised cost reduction in one dimension while expanding hidden costs elsewhere. **Serverless is only 11 years in; cost realities typically take 15–20 years to surface, suggesting we're still in early discovery.**
+
+The ASP bubble (1995–2005) made identical promises but failed due to technology barriers and architecture incompatibility. Serverless survived by: (1) deploying on mature infrastructure, (2) reframing as "innovation" rather than "outsourcing," and (3) fragmenting adoption so cost failures concentrate in high-scale use cases (Prime Video) while successes dominate narratives (startups).
+
+**The Pricing Paradox**: Lambda's unit cost fell 40–50%, but architectural overhead exploded. A 2024 serverless stack requires API Gateway, SQS/SNS, DynamoDB, X-Ray, and observability tools. Result: per-invocation costs fell while per-application costs rose ($100→$3K–$10K/month for equivalent scale).
+
+Peak hype occurred 2019–2020; disillusionment began 2022–2023 (Prime Video, Figma exits). This 2–4 year lag matches historical precedent and suggests stabilization into pragmatic niches by 2025–2027.
+
+## Sub-Questions Generated
+
+1. Abstraction cycle patterns—did prior shifts deliver on cost promises?
+2. Why serverless survived where ASPs collapsed
+3. When did narrative peak vs. organizational dissent begin?
+4. How do falling unit prices interact with rising architectural requirements?
+5. Organizational characteristics predicting exit (scale, latency sensitivity, regulatory constraints)
+
+## Progress: 6.5/10
+
+Adds critical historical depth and comparative analysis. Remains: quantitative longitudinal data, organizational mechanics (why do teams stay despite cost reality?), and sector-by-sector vertical analysis.
+
+**Conclusion**: Serverless is cheaper for ~20% of workloads, expensive for ~50%, neutral for ~30%—but selective positioning obscures this segmentation.

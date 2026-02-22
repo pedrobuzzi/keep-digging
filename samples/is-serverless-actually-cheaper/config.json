@@ -1,0 +1,6 @@
+{
+    "max_iterations": 5,
+    "models": "opus,sonnet,haiku",
+    "created": "2026-02-22T02:27:43Z",
+    "verbose": false
+}

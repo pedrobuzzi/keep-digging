@@ -1,0 +1,6 @@
+**Survivorship bias**: Where is the systematic evidence from organizations that *failed* with serverless? The public record is dominated by success stories—what does that asymmetry tell us about the validity of cost claims?
+**Comparison baseline integrity**: Is "serverless vs. EC2" even a fair comparison? The analysis ignores modern alternatives (Fargate, Cloud Run, Kubernetes with KEDA, spot instances, savings plans)—how does serverless fare against *actually competitive* alternatives?
+**Who benefits from the "serverless saves money" narrative?** If cloud providers earn higher margins on Lambda than EC2, consultants earn more from complex architectures, and engineers pad resumes with serverless skills—does any neutral party actually validate TCO claims?
+**Is "complexity transfer" actually cost-neutral?** Iteration 1 treats trading infra ops for architectural complexity as roughly equivalent. What's the actual cost differential between debugging a dead EC2 instance vs. tracing a distributed, event-driven serverless failure cascade?
+**Do serverless cost models systematically obscure the *unit economics* that would trigger scrutiny?** Lambda bills at sub-penny granularity—does this pricing granularity deliberately make aggregated costs harder to monitor compared to a monthly EC2 invoice?
+--

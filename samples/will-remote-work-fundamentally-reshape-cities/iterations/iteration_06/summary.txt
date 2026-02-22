@@ -1,0 +1,25 @@
+# Empirical Scientist Analysis: Remote Work and Urban Reshaping (Compressed)
+
+**Key Findings:**
+Remote work adoption expanded from 7% to 15-20% post-pandemic, correlating with observable trends: SF population declined 7.5% (2020-2024), commercial vacancy rose 10-15 points nationally, secondary cities (Austin, Nashville, Boise) show sustained growth. Yet **causation remains unmeasured**—multiple confounders (tax migration, housing cost shocks, pandemic psychology, pre-pandemic Sun Belt trends) have equal explanatory power.
+
+**Critical Gap—No Causal Attribution:**
+Multi-variate regression isolating remote work's partial effect versus taxes, housing costs, and industry composition has not been published. Current confidence that remote work is the primary driver: 25-35% (low).
+
+**Sub-Questions Generated:**
+1. What causal elasticity does remote work have on location choice? (Requires quasi-experimental designs from employer RTO mandates or policy variation)
+2. At what commercial vacancy threshold do fiscal cascades activate? (No historical validation of tipping points)
+3. Which city types are vulnerable? (Heterogeneity unmeasured; no quantitative vulnerability scoring)
+4. Do revealed preferences differ from stated preferences? (Long-term behavioral tracking absent)
+
+**Falsifiability Problem:**
+"Fundamental reshaping" lacks measurable definition. Proposed threshold: 4+ top-10 metros with >15% sustained decline by 2045. Current trajectory suggests only San Francisco approaches this (60% probability); others show <20% likelihood.
+
+**Time-Series Contamination:**
+Four years of data (2020-2024) overlaps pandemic shock, monetary expansion, and inflation—confounding factors dwarf remote work's isolated signal. Historical precedent: urban decline from deindustrialization took 20-30 years to manifest.
+
+**Honest Assessment:**
+Mechanisms (feedback loops, fiscal stress, tipping points) are identified but untested. Fiscal doom-loop predictions assume tipping points without historical evidence of cascade thresholds. Confidence in "fundamental reshaping" by 2046: **25%** (very low).
+
+**Progress Score: 6.5/10**
+Advances: real correlations and systems thinking. Gaps: no causal evidence, insufficient time depth, no quasi-experiments, tipping points untested.

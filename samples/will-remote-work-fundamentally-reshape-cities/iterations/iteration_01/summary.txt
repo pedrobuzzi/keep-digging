@@ -1,0 +1,19 @@
+# Remote Work and Urban Reshaping: First Principles Analysis
+
+**Core Insight:** Cities exist for multiple irreducible reasons beyond office work—infrastructure sharing, social bonding, agglomeration economies, and path dependency. Remote work only decouples routine knowledge work from specific locations, affecting 30-35% of jobs that *can* be remote, with only 10-15% actually fully remote post-pandemic.
+
+**Key Sub-Questions Generated:**
+- Which agglomeration forces does remote work actually eliminate versus which persist?
+- What percentage of urban economic activity is truly remote-workable (versus service, healthcare, manufacturing, government work)?
+- Does remote work eliminate proximity or merely change its frequency (e.g., 2 days/week vs. 5)?
+- What feedback loops emerge—does partial depopulation make cities more or less livable?
+- How did previous "death of distance" technologies (telegraph, telephone, automobile) actually affect urban concentration?
+
+**First Principles Analysis:**
+Cities persist due to: (1) economic agglomeration and knowledge spillovers (remote work weakens but doesn't eliminate tacit knowledge transfer), (2) shared infrastructure anchors (hospitals, universities, airports require large populations), (3) social/mating markets (biological, untouched by Zoom), and (4) massive sunk capital creating inertia.
+
+**Predicted Outcome:** Incremental evolution, not fundamental reshaping. Remote work enables intra-metro redistribution (suburbs and secondary cities grow) and moderate inter-metro migration (away from superstar cities), but not true rural dispersal or abandonment of urbanism. Historical precedent is revealing: telegraph, telephone, and internet all predicted to kill cities; urbanization accelerated instead.
+
+**Critical Gap:** Current analysis requires exploration of differential city impacts (developed vs. developing, large vs. small), AI's potential to expand remote-workable jobs, demographic shifts, and novel urban forms.
+
+**Progress: 4/10** — Solid analytical foundation established, but significant gaps remain in quantitative modeling and second-order effects.

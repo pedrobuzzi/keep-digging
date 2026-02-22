@@ -1,108 +1,148 @@
 # keep-digging
 
-Ferramenta CLI que usa o [Claude CLI](https://docs.anthropic.com/en/docs/claude-cli) para fazer pesquisa iterativa e profunda sobre uma pergunta. A cada iteração, adota uma perspectiva diferente, gera novas sub-perguntas, e acumula conhecimento — até sintetizar tudo numa resposta final consolidada.
+> **Iterative, multi-perspective deep research powered by Claude.**
 
-## Como funciona
+A CLI tool that leverages the [Claude CLI](https://docs.anthropic.com/en/docs/claude-cli) to perform deep, iterative research on any question. Each iteration adopts a different thinking perspective, rotates through Claude models, generates sub-questions, and accumulates knowledge — until everything is synthesized into a final consolidated answer.
 
-1. Você faz uma pergunta
-2. O loop executa N iterações, cada uma com uma **perspectiva diferente** (ex: Pensador de Primeiros Princípios, Crítico Cético, Analista Histórico...) e um **modelo diferente** (opus, sonnet, haiku em rotação)
-3. Cada iteração recebe o contexto acumulado das anteriores, identifica gaps, gera sub-perguntas e aprofunda a análise
-4. No final, uma chamada de síntese consolida tudo em: resposta final, achados-chave e perguntas em aberto
+### **Zero API costs — runs on your Claude subscription**
 
-### As 10 perspectivas
+If you have a [Claude Pro, Max, or Team](https://claude.ai/pricing) subscription, you already have access to Claude CLI at **no extra cost**. That means keep-digging runs entirely on your existing plan — no API keys, no usage-based billing, no surprise invoices. You're already paying for Claude; this tool helps you get significantly more value out of that subscription by automating multi-model, multi-perspective research that would take dozens of manual prompts.
 
-| # | Perspectiva | Foco |
-|---|-------------|------|
-| 1 | First Principles Thinker | Decompor até os fundamentos |
-| 2 | Skeptical Critic | Questionar evidências e lógica |
-| 3 | Historical Analyst | Precedentes e padrões históricos |
-| 4 | Systems Thinker | Conexões, feedback loops, efeitos de 2a ordem |
-| 5 | Devil's Advocate | Argumentar o oposto do consenso |
-| 6 | Empirical Scientist | Dados, evidências, falsificabilidade |
-| 7 | Practical Pragmatist | O que funciona na prática |
-| 8 | Creative Lateral Thinker | Conexões inesperadas entre domínios |
-| 9 | Ethical Philosopher | Dimensões morais e humanas |
-| 10 | Synthesis Integrator | Unificar tudo num framework coerente |
+## Why keep-digging?
 
-Com 3 modelos em rotação, são **30 combinações únicas** antes de repetir.
+| | keep-digging | ChatGPT Deep Research | Perplexity Pro | Claude API |
+|---|:---:|:---:|:---:|:---:|
+| Uses your existing subscription | **Yes** | Yes | Yes | No (pay per token) |
+| Multi-perspective analysis | **10 perspectives** | Single | Single | Manual |
+| Multi-model rotation | **Opus + Sonnet + Haiku** | Single model | Single model | Manual |
+| Resumable sessions | **Yes** | No | No | Manual |
+| Full output saved locally | **Yes** (Markdown) | No | No | Manual |
+| Open source & customizable | **Yes** | No | No | — |
+| Cost | **$0 extra** | Included | Included | ~$0.50–5+ per run |
 
-## Instalação
+> **TL;DR** — If you subscribe to Claude, you're leaving value on the table by not using the CLI. keep-digging turns a single question into a structured, multi-model research pipeline that would cost real money on the API — and you already have it for free.
 
-Requer o [Claude CLI](https://docs.anthropic.com/en/docs/claude-cli) instalado e autenticado.
+## How It Works
+
+```
+Question ──► Iteration 1 (First Principles / Opus)
+             Iteration 2 (Skeptical Critic / Sonnet)
+             Iteration 3 (Historical Analyst / Haiku)
+             ...
+             Iteration N ──► Synthesis ──► Final Answer
+```
+
+1. You ask a question
+2. The tool runs N iterations, each with a **different perspective** and a **different model** in rotation
+3. Each iteration receives accumulated context from all previous ones, identifies gaps, and generates sub-questions to go deeper
+4. A final synthesis call consolidates everything into: **final answer**, **key findings** (with confidence levels), and **open questions**
+
+## The 10 Perspectives
+
+| # | Perspective | Focus |
+|---|-------------|-------|
+| 1 | First Principles Thinker | Decompose down to fundamentals |
+| 2 | Skeptical Critic | Challenge evidence and logic |
+| 3 | Historical Analyst | Precedents and historical patterns |
+| 4 | Systems Thinker | Connections, feedback loops, second-order effects |
+| 5 | Devil's Advocate | Argue the opposite of consensus |
+| 6 | Empirical Scientist | Data, evidence, falsifiability |
+| 7 | Practical Pragmatist | What actually works in practice |
+| 8 | Creative Lateral Thinker | Unexpected cross-domain connections |
+| 9 | Ethical Philosopher | Moral and human dimensions |
+| 10 | Synthesis Integrator | Unify everything into a coherent framework |
+
+With 3 models rotating (Opus, Sonnet, Haiku), that's **30 unique combinations** before any repetition.
+
+## Installation
+
+### Prerequisites
+
+- [Claude CLI](https://docs.anthropic.com/en/docs/claude-cli) installed and authenticated
+
+### Setup
 
 ```bash
-git clone <repo-url> && cd keep-digging
+git clone https://github.com/your-username/keep-digging.git
+cd keep-digging
 chmod +x keep-digging
 ```
 
-## Uso
-
-```
-./keep-digging [OPTIONS] <pergunta>
-```
-
-### Opções
-
-| Flag | Descrição | Default |
-|------|-----------|---------|
-| `-n, --max-iterations <N>` | Número de iterações | 10 |
-| `-o, --output-dir <path>` | Diretório de saída | auto-gerado |
-| `-m, --models <list>` | Rotação de modelos (CSV) | `opus,sonnet,haiku` |
-| `-q, --question-file <path>` | Ler pergunta de um arquivo | — |
-| `-r, --resume` | Continuar de onde parou (requer `-o`) | — |
-| `-s, --synthesize-only` | Só rodar síntese final (requer `-o`) | — |
-| `-v, --verbose` | Modo verbose | — |
-| `-h, --help` | Ajuda | — |
-
-### Exemplos
+## Usage
 
 ```bash
-# Pesquisa básica com 3 iterações
+./keep-digging [OPTIONS] <question>
+```
+
+### Options
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `-n, --max-iterations <N>` | Number of research iterations | `10` |
+| `-o, --output-dir <path>` | Output directory | auto-generated |
+| `-m, --models <list>` | Model rotation (comma-separated) | `opus,sonnet,haiku` |
+| `-q, --question-file <path>` | Read question from a file | — |
+| `-r, --resume` | Resume a previous session (requires `-o`) | — |
+| `-s, --synthesize-only` | Run only the final synthesis (requires `-o`) | — |
+| `-v, --verbose` | Verbose mode | — |
+| `-h, --help` | Show help | — |
+
+### Examples
+
+```bash
+# Basic research with 3 iterations
 ./keep-digging -n 3 "What caused the fall of the Roman Empire?"
 
-# Usando só sonnet e haiku
+# Use only Sonnet and Haiku
 ./keep-digging -n 5 -m sonnet,haiku "How does mRNA vaccine technology work?"
 
-# Pergunta a partir de um arquivo
-./keep-digging -n 5 -q minha_pergunta.txt
+# Read question from a file
+./keep-digging -n 5 -q my_question.txt
 
-# Retomar uma pesquisa interrompida
+# Resume an interrupted session
 ./keep-digging -r -o dig_roman-empire_20260220_150000/ -n 10
 
-# Estender para mais iterações
+# Extend to more iterations
 ./keep-digging -r -o dig_roman-empire_20260220_150000/ -n 20
 
-# Re-sintetizar com os dados existentes
+# Re-synthesize with existing data
 ./keep-digging -s -o dig_roman-empire_20260220_150000/
 ```
 
-## Saída
+## Output
 
-Cada execução gera um diretório com a seguinte estrutura:
+Each run generates a structured directory:
 
 ```
 dig_<slug>_<timestamp>/
-  question.txt                  # Pergunta original
-  config.json                   # Configuração da sessão
-  iterations/
-    iteration_01/
-      perspective.txt           # Perspectiva usada
-      model.txt                 # Modelo usado
-      prompt.txt                # Prompt enviado
-      questions.txt             # Sub-perguntas geradas
-      answer.md                 # Resposta completa
-      summary.txt               # Resumo compactado
-    iteration_02/ ...
-  synthesis/
-    final_answer.md             # Resposta final sintetizada
-    key_findings.md             # Achados-chave com nível de confiança
-    open_questions.md           # Perguntas que ficaram em aberto
+├── question.txt                  # Original question
+├── config.json                   # Session configuration
+├── iterations/
+│   ├── iteration_01/
+│   │   ├── perspective.txt       # Perspective used
+│   │   ├── model.txt             # Model used
+│   │   ├── prompt.txt            # Prompt sent
+│   │   ├── questions.txt         # Sub-questions generated
+│   │   ├── answer.md             # Full response
+│   │   └── summary.txt           # Compacted summary
+│   ├── iteration_02/ ...
+│   └── ...
+└── synthesis/
+    ├── final_answer.md           # Final synthesized answer
+    ├── key_findings.md           # Key findings with confidence levels
+    └── open_questions.md         # Remaining open questions
 ```
 
-## Janela de contexto deslizante
+## Sliding Context Window
 
-Para evitar estourar o contexto em pesquisas longas, os resumos anteriores são compactados progressivamente:
+To prevent context overflow in long research sessions, previous summaries are progressively compacted:
 
-- **Iterações 1-5:** todos os resumos completos
-- **Iterações 6-10:** meta-resumo das antigas + resumos completos das 3 últimas
-- **Iterações 11+:** meta-resumo condensado + resumos das 3 mais recentes
+| Iterations | Strategy |
+|------------|----------|
+| 1–5 | All summaries kept in full |
+| 6–10 | Meta-summary of older iterations + last 3 in full |
+| 11+ | Condensed meta-summary + last 3 in full |
+
+## License
+
+MIT

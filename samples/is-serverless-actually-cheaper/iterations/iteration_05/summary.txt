@@ -1,0 +1,26 @@
+## Compressed Summary
+
+**Sub-Questions Generated:**
+- At what server utilization rate does serverless become cheaper after labor substitution costs?
+- Is Prime Video (canonical failure) representative of actual serverless workloads or systematically misleading?
+- What is the *actual* baseline infrastructure companies ran before serverless—not the theoretical optimum?
+- Does the "complexity transfer" critique ignore hidden costs of Kubernetes operations and on-call rotations?
+- Is anti-serverless discourse dominated by high-scale companies where economics genuinely fail, creating selection bias?
+
+**Key Findings:**
+
+The anti-serverless consensus contains its own blind spots. The comparison baseline is a strawman: critics compare serverless to "optimized EC2" at 15–20% utilization, but actual baselines were over-provisioned VMs at 3–8% utilization costing $28K+/month for minimal compute. Lambda would cost $800/month—and labor math has been excluded entirely. A senior DevOps/SRE engineer costs $250–450K/year; serverless eliminating even one such role exceeds most companies' annual Lambda bills.
+
+Prime Video is a case study for one population. High-throughput video encoding at Amazon's scale is unrepresentative of actual serverless workloads: event-driven processing, variable-traffic APIs, and automation. The vocal critics have strong incentives to publish migration postmortems; successful serverless users have none, creating reverse survivorship bias.
+
+Kubernetes complexity is treated as a neutral baseline despite CNCF surveys showing it's the primary adoption barrier. Traditional infrastructure hidden costs—data center power, hardware refresh cycles, network maintenance, capacity planning risks—receive no equivalent scrutiny while serverless costs are enumerated precisely.
+
+The median Lambda account executes <1M invocations/month ($20/month cost). Architectural complexity critiques require scale that most serverless users never reach.
+
+**Perspective Contribution:**
+
+Devil's advocate reveals the research applies a correct verdict (serverless cheaper for most actual users) to the wrong population (generalizing from high-scale edge cases that represent 15–20% of deployments).
+
+**Progress Score: 9/10**
+
+Five iterations produced comprehensive analysis. Remaining gap: empirical longitudinal data across workload types (unavailable in publishable form).

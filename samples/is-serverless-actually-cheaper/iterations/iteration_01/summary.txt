@@ -1,0 +1,26 @@
+## Serverless Cost Analysis: Compressed Summary
+
+**Key Insight:** Serverless is genuinely cheaper only for low, sporadic workloads—not a universal cost win.
+
+**Sub-Questions Generated:**
+1. How do actual cost components (compute, memory, cold starts, orchestration) map across serverless vs. traditional infrastructure?
+2. What is true TCO including vendor lock-in, observability tooling, and engineering time?
+3. At what utilization threshold does serverless become more expensive? (Empirically: ~15-20% for Lambda vs. EC2)
+4. Are companies trading one cost type (infrastructure ops) for another (architectural complexity, debugging)?
+5. Do cloud providers and consultants have incentives to oversell serverless regardless of economics?
+
+**First-Principles Foundation:**
+- All computation requires physical resources; serverless merely abstracts management
+- Pay-per-use is only cheaper than reserved capacity when utilization is low—mathematical certainty
+- Lambda costs ~$0.0000166667/GB-second vs. EC2 at ~$0.00001156/GB-second when fully utilized
+- Hidden operational costs often ignored: cold-start latency, observability complexity, architectural overhead (API Gateway, SQS, SNS charges), vendor lock-in switching costs, and engineering time
+
+**Core Problem:** Companies measure serverless savings narrowly (just Lambda invocation costs) while ignoring the constellation of additional AWS services, tooling, and complexity their serverless architecture requires. They're not intentionally hiding costs—they're systematically *underaccounting* for them.
+
+**Why Confusion Persists:**
+- Cloud providers benefit from serverless (higher revenue per compute cycle)
+- "Cheaper" conflates unrelated dimensions: infrastructure management time, raw compute cost, architectural complexity, time-to-market, operational maturity
+- Serverless can be simultaneously cheaper in time-to-market and more expensive in total cost of ownership
+
+**Progress: 4/10**
+Establishes foundational economics and key variables but lacks empirical case studies, long-term cost evolution, organizational impacts, and analysis of emerging alternatives (containers-as-a-service, edge compute).

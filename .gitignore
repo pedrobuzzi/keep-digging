@@ -1,2 +1,4 @@
 dig_*/
 question*.md
+.DS_Store
+!sample/

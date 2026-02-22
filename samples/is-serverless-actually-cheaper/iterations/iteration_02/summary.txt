@@ -1,0 +1,17 @@
+# Serverless Cost Analysis: Iteration 2 Summary
+
+## Critical Sub-Questions
+- **Survivorship bias**: Public serverless case studies skew positive (success stories published, failures hidden). How does the actual failure rate compare to the curated evidence base?
+- **Comparison baseline**: Serverless vs. raw EC2 is a strawman. Modern alternatives (Fargate, Cloud Run, Kubernetes with KEDA, Spot instances, Savings Plans) often outcompete serverless economically—yet these comparisons are rarely made.
+- **Structural incentives**: AWS earns higher margins on Lambda than EC2; consultants profit from architectural complexity; engineers build career capital through serverless adoption. Does this explain cost claims better than incompetence?
+- **Complexity transfer costs**: Moving from infrastructure ops to distributed systems debugging isn't neutral. Serverless failure modes (cold start races, silent SQS drops, complex Step Functions workflows) require expensive observability tools ($3K–$30K/month)—rarely included in cost analyses.
+
+## Key Findings
+The prior analysis was too charitable. Rather than innocent "underaccounting," structural incentives predict deliberate cost obscuring. Specific figures cited (Lambda pricing, breakeven thresholds) lacked sources and ignored workload variability. 
+
+AWS's pricing architecture deliberately obscures aggregate costs: Lambda's sub-penny granularity, API Gateway's per-million-request billing, and CloudWatch's per-GB ingestion charges hide scaled expenses better than monthly EC2 invoices. The unit economics visibility problem isn't accidental—it reduces cost scrutiny.
+
+Prime Video's 2023 serverless-to-monolith migration is notable precisely because it's rare public admission of failure. The absence of serverless postmortems suggests systematic reporting bias, not evidence of success.
+
+## Progress: 5/10
+Iteration 1 established foundational cost math and hidden category identification. Iteration 2 challenges assumptions and identifies incentive structures but remains primarily theoretical. Lacking: empirical case studies with actual costs, temporal analysis of scaling dynamics, and organizational decision-making mechanics behind false claims.
